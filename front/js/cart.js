@@ -134,7 +134,7 @@ commander.addEventListener('click',function(){
     })
     .then((confirm) => {
       console.log(confirm.orderId);
-      window.location.replace(`file:///C:/Users/Morea/Desktop/P5-Dev-Web-Kanap-master/front/html/confirmation.html?orderId=${confirm.orderId}`);
+      window.location.replace(`../html/confirmation.html?orderId=${confirm.orderId}`);
     })
     .catch((error) => {
       console.log('Erreur',error);
