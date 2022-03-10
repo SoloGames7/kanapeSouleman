@@ -42,24 +42,38 @@ newElt5.addEventListener('click', function() {
 
     let itemQuantity = parseInt(document.getElementById("quantity").value);
     let itemColor = document.getElementById("colors").value;
+    let imageUrl;
+    let altTxt;
+    let name;
+    let price;
     if(itemQuantity!=0 && itemColor!=''){
-        let itemToAdd = {"idItem":id,"quantityItem":itemQuantity,"colorItem":itemColor};
-        let cart = JSON.parse(localStorage.getItem("cart"));
-        let res=true;
-        cart.forEach(item => {
-            if(res){
-                if(itemToAdd["idItem"]==item["idItem"] && itemToAdd["colorItem"]==item["colorItem"]){
-                    res=false;
-                    item["quantityItem"]=parseInt(itemToAdd["quantityItem"],10)+parseInt(item["quantityItem"],10);
+        fetch(`http://localhost:3000/api/products/${id}`)
+        .then((reponse) => reponse.json())
+        .then((reponse) => {
+            imageUrl = reponse["imageUrl"];
+            altTxt = reponse["altTxt"];
+            name = reponse['name'];
+            price = reponse['price'];
+            console.log(price);
+            let itemToAdd = {"idItem":id,"quantityItem":itemQuantity,"colorItem":itemColor,"imageUrl":imageUrl, "altTxt":altTxt,"name":name,"price":price};
+            let cart = JSON.parse(localStorage.getItem("cart"));
+            let res=true;
+            cart.forEach(item => {
+                if(res){
+                    if(itemToAdd["idItem"]==item["idItem"] && itemToAdd["colorItem"]==item["colorItem"]){
+                        res=false;
+                        item["quantityItem"]=parseInt(itemToAdd["quantityItem"],10)+parseInt(item["quantityItem"],10);
+                        localStorage.setItem("cart",JSON.stringify(cart));
+                    }
+                }
+            });
+                if(res){
+                    cart.push(itemToAdd);
                     localStorage.setItem("cart",JSON.stringify(cart));
                 }
-            }
-        });
-        if(res){
-            cart.push(itemToAdd);
-            localStorage.setItem("cart",JSON.stringify(cart));
-        }
-        console.log(cart);
+                console.log(cart);
+                });
+    
     }else{
         console.log("attributs non renseigné");
     }
